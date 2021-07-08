@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/albums/create', [AlbumController::class, 'Create'])->middleware('auth');
+Route::get('/albums/create', [AlbumController::class, 'Create'])->name('album.create')->middleware('auth');
 
 Route::post('/albums/store', [AlbumController::class, 'store'])->middleware('auth');
 

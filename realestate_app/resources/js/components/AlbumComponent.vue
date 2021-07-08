@@ -26,7 +26,7 @@
 
                 <div class="col-md-12">
                     <select id="category"  class="form-control" name="category" v-model="category"  >
-                        <option value="">Select</option>
+                        <option value="">Select Category</option>
                         <option v-for="(category, index) in categories" :key="index" :value="category.id" >
                             {{category.name}}
                         </option>
