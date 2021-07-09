@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlbumController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,10 +22,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/albums/create', [AlbumController::class, 'Create'])->name('album.create')->middleware('auth');
-
-Route::post('/albums/store', [AlbumController::class, 'store'])->middleware('auth');
 
 Route::get('/albums', [AlbumController::class, 'index'])->middleware('auth');
 
 Route::get('/getalbums', [AlbumController::class, 'getAlbums'])->middleware('auth');
+
+Route::get('/albums/create', [AlbumController::class, 'Create'])->name('album.create')->middleware('auth');
+
+Route::post('/albums/store', [AlbumController::class, 'store'])->middleware('auth');
+
+Route::put('/albums/{id}/edit', [AlbumController::class, 'Update']);
+
+Route::delete('/albums/{id}/delete', [AlbumController::class, 'destroy'])->middleware('auth');

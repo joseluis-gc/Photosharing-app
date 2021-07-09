@@ -14,7 +14,7 @@
             <div class="modal-body">
 
                 <!--body-->
-                <form @submit.prevent="createAlbum" method="POST" action="" enctype="multipart/form-data">
+                <form @submit.prevent="updateAlbum" method="POST" action="" enctype="multipart/form-data">
 
                     <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-left">Album Name</label>
@@ -52,7 +52,7 @@
                         <label for="image" class="col-md-4 col-form-label text-md-left"></label>
 
                         <div class="col-md-12">
-                            <input id="image" type="file"  class="form-control" name="image" >
+                            <input id="image" type="file"  class="form-control" name="image" v-on:change="onImageChange">
                         </div>
 
                     </div>
@@ -85,11 +85,12 @@ export default {
     props:["editrecord"],
     data() {
         return {
-            categories:[]
+            categories:[],
+            $image:''
         }
     },
     created() {
-        this.getCategories
+        this.getCategories()
     },
     methods: {
         getCategories()
@@ -99,6 +100,52 @@ export default {
             }).catch((error)=>{
                 alert('Unable to fetch data.')
             })
+        },
+        updateAlbum()
+        {
+
+           const config = {
+                headers:{
+                    "content-type":"multipart/form-data"
+                }
+            }
+            let formData = new FormData();
+            formData.append('image', this.image);
+            formData.append('name', this.editrecord.name);
+            formData.append('description', this.editrecord.description);
+            formData.append('category', this.editrecord.category_id);
+
+            formData.append('_method', 'put');
+
+            axios.post('/albums/'+this.editrecord.id+'/edit', formData,config).then((response)=>{
+                $('#exampleModal').modal('hide');
+                this.$emit('recordUpdated', response);
+
+                //sweetalert
+
+
+                Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your album has been saved',
+                showConfirmButton: true,
+                timer: 5000
+                })
+
+                //sweet alert end
+
+
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+
+
+        },
+        onImageChange(e)
+        {
+            console.log(e)
+            this.image = e.target.files[0];
         },
     },
 }

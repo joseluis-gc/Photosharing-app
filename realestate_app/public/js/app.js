@@ -2061,11 +2061,12 @@ __webpack_require__.r(__webpack_exports__);
   props: ["editrecord"],
   data: function data() {
     return {
-      categories: []
+      categories: [],
+      $image: ''
     };
   },
   created: function created() {
-    this.getCategories;
+    this.getCategories();
   },
   methods: {
     getCategories: function getCategories() {
@@ -2076,6 +2077,41 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert('Unable to fetch data.');
       });
+    },
+    updateAlbum: function updateAlbum() {
+      var _this2 = this;
+
+      var config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      var formData = new FormData();
+      formData.append('image', this.image);
+      formData.append('name', this.editrecord.name);
+      formData.append('description', this.editrecord.description);
+      formData.append('category', this.editrecord.category_id);
+      formData.append('_method', 'put');
+      axios.post('/albums/' + this.editrecord.id + '/edit', formData, config).then(function (response) {
+        $('#exampleModal').modal('hide');
+
+        _this2.$emit('recordUpdated', response); //sweetalert
+
+
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Your album has been saved',
+          showConfirmButton: true,
+          timer: 5000
+        }); //sweet alert end
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    onImageChange: function onImageChange(e) {
+      console.log(e);
+      this.image = e.target.files[0];
     }
   }
 });
@@ -2168,6 +2204,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2193,6 +2236,40 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    recordUpdate: function recordUpdate(response) {
+      this.albums = response.data;
+    },
+    deleteRecord: function deleteRecord(id) {
+      var _this3 = this;
+
+      //sweetalert
+      Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        text: 'You wont be able to get this back.',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        showCancelColor: '#3085d6',
+        confirmButtonText: 'Yes, Delete This!'
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"]('/albums/' + id + '/delete').then(function (response) {
+            //sweetalert
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Your album has been deleted',
+              showConfirmButton: true,
+              timer: 5000
+            }); //sweet alert end
+
+            _this3.albums = response.data;
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        }
+      }); //sweet alert end
     }
   }
 });
@@ -38255,7 +38332,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.createAlbum.apply(null, arguments)
+                        return _vm.updateAlbum.apply(null, arguments)
                       }
                     }
                   },
@@ -38416,9 +38493,22 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(1),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c("label", {
+                        staticClass: "col-md-4 col-form-label text-md-left",
+                        attrs: { for: "image" }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: { id: "image", type: "file", name: "image" },
+                          on: { change: _vm.onImageChange }
+                        })
+                      ])
+                    ]),
                     _vm._v(" "),
-                    _vm._m(2)
+                    _vm._m(1)
                   ]
                 )
               ])
@@ -38453,24 +38543,6 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c("label", {
-        staticClass: "col-md-4 col-form-label text-md-left",
-        attrs: { for: "image" }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { id: "image", type: "file", name: "image" }
-        })
-      ])
     ])
   },
   function() {
@@ -38576,7 +38648,7 @@ var render = function() {
           _c(
             "tbody",
             _vm._l(_vm.albums, function(album, index) {
-              return _c("tr", [
+              return _c("tr", { key: index }, [
                 _c("td", [_vm._v(_vm._s(index + 1))]),
                 _vm._v(" "),
                 _c("td", [
@@ -38616,6 +38688,27 @@ var render = function() {
                       )
                     ]
                   )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.deleteRecord(album.id)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Delete\n                    "
+                      )
+                    ]
+                  )
                 ])
               ])
             }),
@@ -38624,7 +38717,10 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("edit", { attrs: { editrecord: _vm.records } })
+      _c("edit", {
+        attrs: { editrecord: _vm.records },
+        on: { recordUpdated: _vm.recordUpdate }
+      })
     ],
     1
   )

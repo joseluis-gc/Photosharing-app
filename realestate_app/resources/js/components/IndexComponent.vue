@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(album,index) in albums">
+                <tr v-for="(album,index) in albums" :key="index">
                     <td >{{index+1}}</td>
 
                     <td ><img :src="'/album/' + album.image" style="max-width:151px" class="img-fluid img-thumbnail"></td>
@@ -28,11 +28,18 @@
                             Edit
                         </button>
                     </td>
+
+                    <td>
+                        <button @click.prevent="deleteRecord(album.id)" type="button" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
 
-        <edit :editrecord="records"></edit>
+        <edit :editrecord="records" @recordUpdated="recordUpdate"></edit>
 
 
     </div>
@@ -61,6 +68,45 @@ export default
             }).catch((error)=>{
                 console.log(error);
             });
+        },
+        recordUpdate(response)
+        {
+            this.albums =  response.data
+        },
+        deleteRecord(id)
+        {
+                //sweetalert
+
+                Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                text: 'You wont be able to get this back.',
+                showCancelButton:true,
+                confirmButtonColor:'#d33',
+                showCancelColor:'#3085d6',
+                confirmButtonText: 'Yes, Delete This!'
+                }).then((result)=>{
+                    if(result.value)
+                    {
+                        axios.delete('/albums/'+id+'/delete').then((response)=>{
+                                //sweetalert
+                                Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Your album has been deleted',
+                                showConfirmButton: true,
+                                timer: 5000
+                                })
+                                //sweet alert end
+                            this.albums = response.data;
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                })
+
+                //sweet alert end
+
         }
     },
 }
