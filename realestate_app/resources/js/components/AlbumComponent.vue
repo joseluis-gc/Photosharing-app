@@ -54,7 +54,7 @@
         </form>
 
         <div v-if="success">
-            <a :href="'gallery/'+album_id">Album Created</a>
+            <a :href="'/upload/images/'+album_id">Album Created</a>
         </div>
 
     </div>

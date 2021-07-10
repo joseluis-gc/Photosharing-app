@@ -24,7 +24,13 @@
                     <td>{{album.category.name}}</td>
 
                     <td>
-                        <button @click.prevent="edit(album.id)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        <a :href="'/upload/images/'+album.id" class="btn btn-primary">
+                            Upload
+                        </a>
+                    </td>
+
+                    <td>
+                        <button @click.prevent="edit(album.id)" type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">
                             Edit
                         </button>
                     </td>
@@ -76,7 +82,6 @@ export default
         deleteRecord(id)
         {
                 //sweetalert
-
                 Swal.fire({
                 title: 'Are you sure?',
                 icon: 'warning',
