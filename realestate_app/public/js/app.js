@@ -2294,6 +2294,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['album_id'],
   data: function data() {
@@ -38877,17 +38879,30 @@ var render = function() {
                 "div",
                 {
                   key: index,
-                  staticClass: "card h-100 border-0 shadow",
+                  staticClass:
+                    "card h-100 border-0 shadow d-flex align-items-stretch",
                   staticStyle: { width: "32%", margin: "5px" }
                 },
                 [
-                  _c("img", {
-                    staticClass: "card-img-top img-fluid",
-                    attrs: {
-                      src: "/images/" + image.image,
-                      alt: "Card image cap"
-                    }
-                  }),
+                  _c(
+                    "div",
+                    {
+                      staticStyle: {
+                        height: "200px",
+                        overflow: "hidden",
+                        width: "100%"
+                      }
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "card-img-top img-fluid",
+                        attrs: {
+                          src: "/images/" + image.image,
+                          alt: "Card image cap"
+                        }
+                      })
+                    ]
+                  ),
                   _vm._v(" "),
                   _vm._m(0, true)
                 ]
@@ -38907,7 +38922,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-body" }, [
       _c("p", { staticClass: "card-text" }, [
-        _c("a", { staticClass: "btn btn-danger" }, [_vm._v("Delete")])
+        _c("a", { staticClass: "btn btn-danger btn-block" }, [_vm._v("Delete")])
       ])
     ])
   }

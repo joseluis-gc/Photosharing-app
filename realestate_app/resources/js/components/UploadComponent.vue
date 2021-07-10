@@ -15,16 +15,18 @@
             <div class="">
                 <div class="row">
 
-                    <div class="card h-100 border-0 shadow" style="width:32%; margin:5px;"  v-for="(image,index) in images" :key="index">
-                        <img class="card-img-top img-fluid" :src="'/images/'+image.image" alt="Card image cap">
+                    <div class="card h-100 border-0 shadow d-flex align-items-stretch" style="width:32%; margin:5px;"  v-for="(image,index) in images" :key="index">
+                        <div style="height:200px; overflow:hidden; width:100%;">
+                            <img class="card-img-top img-fluid" :src="'/images/'+image.image" alt="Card image cap">
+                        </div>
+
+
                         <div class="card-body">
                             <p class="card-text">
-                                <a class="btn btn-danger">Delete</a>
+                                <a class="btn btn-danger btn-block">Delete</a>
                             </p>
                         </div>
                     </div>
-
-
 
                 </div>
             </div>
